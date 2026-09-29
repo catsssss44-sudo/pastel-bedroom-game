@@ -1,0 +1,69 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Pastel Bedroom</title>
+<style>
+body { font-family: Arial, sans-serif; background: #fff0f5; color: #875b79; text-align: center; padding: 15px; }
+h1 { color: #d875ad; }
+.card { background: white; border-radius: 20px; padding: 20px; margin: 20px auto; max-width: 500px; }
+button { background: #f7c9e2; color: #754967; border: none; border-radius: 12px; padding: 12px; margin: 5px; cursor: pointer; }
+#room { background: #fff3df; border: 4px solid #f6d2e8; border-radius: 18px; min-height: 130px; padding: 15px; font-size: 30px; }
+</style>
+</head>
+<body>
+<h1>🎀 My Pastel Bedroom 🎀</h1>
+<p>Answer questions, earn coins, and decorate!</p>
+<div class="card"><h2>🪙 Coins: <span id="coins">0</span></h2></div>
+<div class="card">
+<h2>🌸 Character Quiz</h2><p id="question"></p><div id="answers"></div><p id="message"></p>
+<button onclick="nextQuestion()">Next Question ➜</button>
+</div>
+<div class="card">
+<h2>🛍️ Furniture Shop</h2>
+<button onclick="buy('🧸',20)">🧸 Teddy Bear — 20 coins</button>
+<button onclick="buy('🌷',30)">🌷 Flower — 30 coins</button>
+<button onclick="buy('🌱',40)">🌱 Plant — 40 coins</button>
+<button onclick="buy('🩷',50)">🩷 Pink Rug — 50 coins</button>
+<button onclick="buy('🪑',75)">🪑 Chair — 75 coins</button>
+<button onclick="buy('🛏️',150)">🛏️ New Bed — 150 coins</button>
+</div>
+<div class="card"><h2>🏡 My Bedroom</h2><div id="room">🪟 🌸 🪟<br>🛏️<br>My cozy bedroom!</div></div>
+<script>
+let coins = Number(localStorage.getItem("coins")) || 0;
+const questions = [
+ {q:"Who is Bluey's little sister?",a:["Bingo","Hello Kitty","Chilli"],correct:0},
+ {q:"What animal is Hello Kitty?",a:["A dog","A cat","A bunny"],correct:1},
+ {q:"What kind of animal is Bluey?",a:["A puppy","A kitten","A bear"],correct:0},
+ {q:"Who is Bluey's mum?",a:["Bingo","Chilli","Muffin"],correct:1}
+];
+let current = 0, answered = false, streak = 0;
+function updateCoins(){document.getElementById("coins").textContent=coins;localStorage.setItem("coins",coins);}
+function showQuestion(){
+ const q=questions[current];document.getElementById("question").textContent=q.q;
+ const box=document.getElementById("answers");box.innerHTML="";
+ q.a.forEach((text,index)=>{const button=document.createElement("button");button.textContent=text;button.onclick=()=>answer(index);box.appendChild(button);});
+ document.getElementById("message").textContent="";answered=false;
+}
+function answer(choice){
+ if(answered)return;answered=true;
+ if(choice===questions[current].correct){
+  coins+=10;streak++;let text="Correct! +10 coins! 🎉";
+  if(streak%5===0){coins+=25;text+=" Five in a row! Bonus +25! 🌟";}
+  document.getElementById("message").textContent=text;
+ }else{streak=0;document.getElementById("message").textContent="Not quite! Try the next question. 💗";}
+ updateCoins();
+}
+function nextQuestion(){current=(current+1)%questions.length;showQuestion();}
+function buy(emoji,price){
+ if(coins<price){document.getElementById("message").textContent="Not enough coins yet! Keep playing! 💕";return;}
+ coins-=price;const item=document.createElement("span");item.textContent=" "+emoji;document.getElementById("room").appendChild(item);updateCoins();
+}
+updateCoins();showQuestion();
+</script>
+</body>
+</html>'''
+path = "/mnt/data/pastel-bedroom-game.html"
+with open(path, "w", encoding="utf-8") as f:
+    f.write(html)
